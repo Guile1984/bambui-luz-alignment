@@ -1,0 +1,41 @@
+# Bytecode e artefatos do Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Caches de ferramentas
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ambientes virtuais locais
+.venv/
+venv/
+
+# Configuração pessoal de editor
+.vscode/
+.idea/
+
+# Notebooks: saídas de execução
+.ipynb_checkpoints/
+
+# Sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Dados: ignorar conteúdo, preservar a estrutura de pastas
+data/*
+!data/raw/
+!data/processed/
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Segredos e configuração local
+.env
+*.local.toml
