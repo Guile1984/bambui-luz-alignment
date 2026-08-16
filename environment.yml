@@ -1,0 +1,27 @@
+name: bambui-luz
+
+channels:
+  - conda-forge
+  - nodefaults
+
+dependencies:
+  # Interpretador
+  - python=3.12
+
+  # Núcleo geoespacial
+  - gdal
+  - rasterio
+  - geopandas
+  - shapely
+  - pyproj
+
+  # Numérico e análise
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+
+  # Qualidade e testes
+  - ruff
+  - pytest
+  - pre-commit

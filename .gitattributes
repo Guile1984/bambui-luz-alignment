@@ -1,0 +1,10 @@
+# Normalização de fins de linha: LF no repositório e no disco
+* text=auto eol=lf
+
+# Arquivos binários: nunca converter
+*.png binary
+*.jpg binary
+*.tif binary
+*.tiff binary
+*.gpkg binary
+*.zip binary
