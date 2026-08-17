@@ -50,14 +50,10 @@ operacional. `.gitattributes` tem precedência sobre `core.autocrlf`.
 
 ## Pendências
 
-- **LICENSE ausente.** O `pyproject.toml` declara licença MIT, mas o arquivo
-  com o texto não existe. **Gatilho:** antes de publicar no GitHub.
-- **Ponto de conexão em Bambuí indefinido.** Duas hipóteses a comparar:
-  centro do município versus entroncamento no contorno de 3,5 km anunciado.
-  **Gatilho:** Sprint 6 (comparação e análise de sensibilidade).
-- **Fonte do modelo digital de elevação não decidida.** SRTM (domínio
-  público) versus Copernicus GLO-30 (melhor qualidade, exige registro)
-  versus FABDEM (restrição de uso comercial). **Gatilho:** Sprint 2.
+- **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
+  relatório, gráficos e texto do estudo são conteúdo, não software.
+  **Gatilho:** se o relatório final for divulgado como peça autônoma,
+  avaliar licença dupla (MIT + Creative Commons).
 
 ## Descobertas
 
