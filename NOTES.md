@@ -48,6 +48,22 @@ Política LF definida em `.gitattributes` (versionado), não em
 **Motivo:** a política viaja com o repositório e vale para qualquer sistema
 operacional. `.gitattributes` tem precedência sobre `core.autocrlf`.
 
+### CI em Linux, não em Windows
+O workflow roda em `ubuntu-latest`, embora o desenvolvimento seja em Windows.
+
+**Motivo:** a divergência de sistema operacional é o que revela problemas —
+separadores de caminho, fins de linha, sensibilidade a maiúsculas. Um CI que
+espelha a máquina de desenvolvimento não testa portabilidade.
+
+**Gatilho de revisão:** se surgir defeito específico de Windows, considerar
+matriz de sistemas operacionais no workflow.
+
+### CI verifica, não corrige
+O workflow usa `ruff format --check`, não `ruff format`.
+
+**Motivo:** correção automática no servidor produziria divergência entre o
+código enviado e o verificado, mascarando a ausência do hook local.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -62,3 +78,6 @@ operacional. `.gitattributes` tem precedência sobre `core.autocrlf`.
 - `git check-ignore -v` com saída iniciada por `!` indica reinclusão
   bem-sucedida, não exclusão. Ausência de saída significa que nenhum padrão
   toca o caminho.
+- Steps do GitHub Actions rodam em shells independentes; ambientes conda não
+  persistem entre eles. O bloco `defaults: run: shell: bash -el {0}` é o que
+  garante a ativação em cada step.

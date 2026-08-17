@@ -1,4 +1,5 @@
 # bambui-luz-alignment
+[![CI](https://github.com/Guile1984/bambui-luz-alignment/actions/workflows/ci.yml/badge.svg)](https://github.com/Guile1984/bambui-luz-alignment/actions/workflows/ci.yml)
 
 Estudo comparativo de alternativas de traçado rodoviário entre os municípios
 de Bambuí e Luz, no Centro-Oeste de Minas Gerais, com passagem obrigatória
@@ -31,6 +32,25 @@ relação com processos oficiais do Governo de Minas Gerais ou do DER-MG.
 
 **3. Fora de escopo.** Geometria horizontal detalhada, drenagem, pavimento,
 obras de arte especiais, desapropriação e orçamento financeiro.
+
+## Ambiente de desenvolvimento
+
+As bibliotecas geoespaciais deste projeto (GDAL, rasterio, geopandas)
+possuem dependências binárias e devem ser instaladas via conda, não pip.
+
+```bash
+conda env create -f environment.yml
+conda activate bambui-luz
+pip install -e . --no-deps
+pre-commit install
+```
+
+Verificações locais:
+
+```bash
+ruff check .
+pytest
+```
 
 ## Status
 
