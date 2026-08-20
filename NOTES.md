@@ -64,12 +64,39 @@ O workflow usa `ruff format --check`, não `ruff format`.
 **Motivo:** correção automática no servidor produziria divergência entre o
 código enviado e o verificado, mascarando a ausência do hook local.
 
+### Domínio em Python puro, sem NumPy
+As entidades do domínio operam sobre tuplas e floats, sem bibliotecas
+numéricas.
+
+**Motivo:** manter a camada legível por um engenheiro civil, sem exigir
+vocabulário de arrays. Os perfis têm poucos milhares de estações e os
+cálculos são elementares.
+
+**Gatilho de revisão:** se o desempenho se tornar limitante no cálculo de
+volumes (Sprint 5), avaliar a vetorização apenas na camada de serviços.
+
+### Parâmetros normativos fora do domínio
+`ClasseRodovia` recebe a rampa máxima como dado, não a define. O campo
+`fonte` é obrigatório e não pode ser vazio.
+
+**Motivo:** norma é premissa do estudo, não regra do sistema. A
+obrigatoriedade da fonte impede, pelo sistema de tipos, que um parâmetro
+normativo sem procedência seja utilizado.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
   relatório, gráficos e texto do estudo são conteúdo, não software.
   **Gatilho:** se o relatório final for divulgado como peça autônoma,
   avaliar licença dupla (MIT + Creative Commons).
+
+- **Tabela de rampas máximas não verificada na fonte primária.** A referência
+  é o Manual de Projeto Geométrico de Rodovias Rurais (DNER/DNIT, 1999). Um
+  ponto corroborante de fonte secundária indica 4,5% para Classe I-B em relevo
+  ondulado, mas a tabela completa não foi confirmada no manual original.
+  **Gatilho:** antes de definir os parâmetros em `config/`, obter o manual e
+  conferir os valores por classe e relevo. Nenhum número normativo entra no
+  projeto sem essa conferência.
 
 ## Descobertas
 
@@ -81,3 +108,10 @@ código enviado e o verificado, mascarando a ausência do hook local.
 - Steps do GitHub Actions rodam em shells independentes; ambientes conda não
   persistem entre eles. O bloco `defaults: run: shell: bash -el {0}` é o que
   garante a ativação em cada step.
+
+- Um `__post_init__` com o nome digitado errado não gera erro algum: vira um
+  método comum que nunca é chamado, desligando silenciosamente toda a
+  validação da dataclass. Só um teste de validação detecta.
+- Em um `TypeError`, o tipo citado na mensagem identifica a causa: 'method'
+  indica parênteses ausentes na chamada; 'tuple' indica coleção passada onde
+  se esperava um elemento.
