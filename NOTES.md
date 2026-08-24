@@ -83,6 +83,17 @@ volumes (Sprint 5), avaliar a vetorização apenas na camada de serviços.
 obrigatoriedade da fonte impede, pelo sistema de tipos, que um parâmetro
 normativo sem procedência seja utilizado.
 
+### Trecho em estudo: Bambuí a Esteios
+O estudo concentra-se no trecho Bambuí–Esteios; Esteios passa a ser o ponto
+de conexão com a malha pavimentada existente, e não waypoint intermediário.
+
+**Motivo:** o trecho Esteios–Luz é reportado como pavimentado, restando
+decisão de traçado apenas no segmento a oeste. Escopo menor e pergunta de
+engenharia melhor posta.
+
+**A verificar:** a pavimentação do trecho Esteios–Luz e a extensão exata do
+leito natural, ambas mensuráveis na Sprint 3.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -97,6 +108,18 @@ normativo sem procedência seja utilizado.
   **Gatilho:** antes de definir os parâmetros em `config/`, obter o manual e
   conferir os valores por classe e relevo. Nenhum número normativo entra no
   projeto sem essa conferência.
+
+- **README com premissas desatualizadas.** As distâncias de ~25 km em linha
+  reta e ~70 km pela via pavimentada vieram da pesquisa inicial e não se
+  sustentam. **Gatilho:** encerramento da Sprint 2, quando as distâncias
+  estiverem medidas por código. Incluir seção "Revisões de premissa".
+- **Licenciamento do OpenStreetMap não avaliado.** A extração da geometria
+  viária na Sprint 3 usará dados ODbL, com exigência de atribuição e cláusula
+  de compartilhamento para bases derivadas. **Gatilho:** antes de publicar
+  qualquer geometria derivada no repositório.
+- **Situação real da obra.** A fonte oficial registra recuperação do leito
+  natural em curso; o asfaltamento permanece como expectativa, não como obra
+  contratada. **Gatilho:** ajustar o texto do README junto com as premissas.
 
 ## Descobertas
 
@@ -115,3 +138,12 @@ normativo sem procedência seja utilizado.
 - Em um `TypeError`, o tipo citado na mensagem identifica a causa: 'method'
   indica parênteses ausentes na chamada; 'tuple' indica coleção passada onde
   se esperava um elemento.
+
+- Esteios é vila do município de Luz, não distrito de Bambuí. Confirmado no
+  Cadastro de Localidades Selecionadas do IBGE.
+- A distância em linha reta é limite inferior absoluto para qualquer traçado
+  rodoviário. Verificação de sanidade que reprovou a extensão de 22 km
+  atribuída ao trecho Bambuí–Esteios, cuja linha reta é da ordem de 30 km.
+- Sínteses automatizadas de pesquisa podem apresentar citações plausíveis que
+  não correspondem ao conteúdo da fonte. Toda referência deste projeto é
+  verificada no documento original antes de ser adotada.

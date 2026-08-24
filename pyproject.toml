@@ -30,6 +30,7 @@ convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["D", "ANN"]
+"notebooks/*" = ["D", "ANN"]
 
 [tool.ruff.format]
 docstring-code-format = true
