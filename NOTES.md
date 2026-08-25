@@ -94,6 +94,20 @@ engenharia melhor posta.
 **A verificar:** a pavimentação do trecho Esteios–Luz e a extensão exata do
 leito natural, ambas mensuráveis na Sprint 3.
 
+### Fonte de elevação: Copernicus GLO-30 Public
+Tiles obtidos do bucket público em nuvem, sem credencial. Dois tiles cobrem
+o corredor, pois ele cruza o paralelo de 20 graus sul.
+
+**Motivo:** cobertura global a 30 m, formato COG, acesso livre e licença
+gratuita. Verificado e baixado em 2026-08-25.
+
+**Custo aceito:** é modelo de superfície (DSM), não de terreno — inclui
+vegetação e edificações. Ver risco R10.
+
+**Atribuição obrigatória:** a licença exige aviso creditando DLR, Airbus
+Defence and Space, União Europeia e ESA. Transcrever o texto literal da
+licença para o README antes da publicação final.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -121,6 +135,12 @@ leito natural, ambas mensuráveis na Sprint 3.
   natural em curso; o asfaltamento permanece como expectativa, não como obra
   contratada. **Gatilho:** ajustar o texto do README junto com as premissas.
 
+- **Aviso de atribuição do Copernicus ausente no README.** **Gatilho:**
+  antes de divulgar o repositório.
+- **Ponto de conexão em Esteios provisório.** A sede da vila é referência
+  temporária; o nó correto é o entroncamento MG-429/MG-176, confirmado por
+  imagem. **Gatilho:** Sprint 3, com a geometria viária do OpenStreetMap.
+
 ## Descobertas
 
 - `git status` colapsa diretórios sem arquivos rastreados, mostrando apenas
@@ -147,3 +167,13 @@ leito natural, ambas mensuráveis na Sprint 3.
 - Sínteses automatizadas de pesquisa podem apresentar citações plausíveis que
   não correspondem ao conteúdo da fonte. Toda referência deste projeto é
   verificada no documento original antes de ser adotada.
+
+- Cada tile do Copernicus vem acompanhado de máscaras auxiliares: corpos
+  d'água (WBM) e edição (EDM). Podem ser úteis no tratamento de vales na
+  Sprint 5.
+- Requisição HEAD informa a existência e o tamanho de um recurso sem
+  transferi-lo. Comparar esse tamanho com o do arquivo em disco é a
+  verificação mais barata contra download parcial.
+- Teste de URL montada deve verificar a estrutura completa do caminho, não
+  apenas prefixo e sufixo: um teste que checava só as pontas passou sobre
+  uma URL a que faltava um segmento inteiro.
