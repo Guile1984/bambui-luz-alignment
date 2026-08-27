@@ -96,3 +96,11 @@ LUZ = LocalNotavel(
     altitude_ibge_m=663.733692,
 )
 """Sede do município de Luz, categoria CIDADE."""
+
+MARGEM_CORREDOR_M = 5000.0
+"""Folga aplicada em torno das localidades ao recortar o modelo de elevação.
+
+Dimensionada para acomodar traçados alternativos que se afastem da linha
+reta entre os extremos. Um traçado que alcance a borda do recorte indica
+margem insuficiente, não defeito do algoritmo.
+"""

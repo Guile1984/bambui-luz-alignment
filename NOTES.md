@@ -108,6 +108,22 @@ vegetação e edificações. Ver risco R10.
 Defence and Space, União Europeia e ESA. Transcrever o texto literal da
 licença para o README antes da publicação final.
 
+### Recorte permanece no CRS da fonte
+O recorte do corredor não é reprojetado para UTM; a conversão acontece por
+ponto, na consulta.
+
+**Motivo:** reprojetar o raster reamostra todos os pixels, acrescentando uma
+interpolação entre a fonte e o resultado — depois seria impossível separar o
+erro do dado do erro do processamento.
+
+**Custo aceito:** cada consulta paga uma conversão de coordenadas, mitigado
+pela memorização do transformador.
+
+### Geometria do OpenStreetMap não é versionada
+A ODbL exige atribuição e compartilhamento nos mesmos termos para bases
+derivadas. A geometria fica em `data/`, reconstruível pelo script de
+extração; o repositório publica apenas resultados.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -177,3 +193,13 @@ licença para o README antes da publicação final.
 - Teste de URL montada deve verificar a estrutura completa do caminho, não
   apenas prefixo e sufixo: um teste que checava só as pontas passou sobre
   uma URL a que faltava um segmento inteiro.
+
+- O Copernicus GLO-30 não declara nodata nos metadados. Células sem dado
+  válido aparecem como cota exatamente zero. No recorte do corredor, 6,3%
+  das células são zero, todas explicadas por 86 colunas e uma linha nas
+  bordas e na emenda entre os tiles. Nenhuma no corredor de estudo. A menor
+  cota legítima observada é 622,3 m.
+- Os tiles do bucket estão em EPSG:4326 (WGS 84), não em EPSG:4674
+  (SIRGAS 2000). A diferença é submétrica no Brasil, irrelevante diante de
+  células de 30 m, mas a implementação da porta deve ler o CRS do arquivo
+  em vez de presumi-lo.
