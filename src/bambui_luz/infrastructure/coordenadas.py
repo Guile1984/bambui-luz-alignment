@@ -16,7 +16,7 @@ UNIDADE_METRICA = "metre"
 """Nome da unidade de eixo exigida no sistema de referência de trabalho."""
 
 
-def _exigir_crs_metrico(codigo: str) -> CRS:
+def exigir_crs_metrico(codigo: str) -> CRS:
     """Valida que o sistema de referência é projetado e expresso em metros.
 
     Args:
@@ -24,10 +24,6 @@ def _exigir_crs_metrico(codigo: str) -> CRS:
 
     Returns:
         Sistema de referência validado.
-
-    Raises:
-        ValueError: Se o sistema for geográfico ou se algum de seus eixos
-            não estiver em metros.
     """
     crs = CRS.from_user_input(codigo)
     if not crs.is_projected:
@@ -41,6 +37,15 @@ def _exigir_crs_metrico(codigo: str) -> CRS:
             f"encontrado em {codigo}: {sorted(unidades)}"
         )
     return crs
+
+
+CRS_TRABALHO_VALIDADO = exigir_crs_metrico(CRS_TRABALHO)
+"""Sistema de trabalho, validado como projetado e métrico ao importar o módulo.
+
+A verificação ocorre uma única vez, na importação: trocar o sistema de
+trabalho por um geográfico faz o pacote falhar imediatamente, em vez de
+produzir distâncias em graus silenciosamente.
+"""
 
 
 @cache
@@ -57,11 +62,7 @@ def criar_transformador(crs_origem: str, crs_destino: str) -> Transformer:
 
     Returns:
         Transformador configurado na ordem de eixos x, y.
-
-    Raises:
-        ValueError: Se o sistema de destino não for métrico projetado.
     """
-    _exigir_crs_metrico(crs_destino)
     return Transformer.from_crs(crs_origem, crs_destino, always_xy=True)
 
 

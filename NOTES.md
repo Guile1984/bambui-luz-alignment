@@ -157,6 +157,12 @@ extração; o repositório publica apenas resultados.
   temporária; o nó correto é o entroncamento MG-429/MG-176, confirmado por
   imagem. **Gatilho:** Sprint 3, com a geometria viária do OpenStreetMap.
 
+- **Trechos sem tag surface excluídos.** A consulta de geometria filtra por
+  revestimento não pavimentado, deixando de fora os 44 trechos rurais sem a
+  tag. Se o traçado em estudo estiver entre eles, não aparecerá.
+  **Gatilho:** se a análise de conectividade não encontrar caminho contínuo
+  entre Bambuí e o entroncamento.
+
 ## Descobertas
 
 - `git status` colapsa diretórios sem arquivos rastreados, mostrando apenas
@@ -203,3 +209,26 @@ extração; o repositório publica apenas resultados.
   (SIRGAS 2000). A diferença é submétrica no Brasil, irrelevante diante de
   células de 30 m, mas a implementação da porta deve ler o CRS do arquivo
   em vez de presumi-lo.
+
+- Aferição do MDE contra as altitudes do IBGE nas três localidades:
+  diferenças de -3,3 m (Bambuí), -5,0 m (Esteios) e +2,4 m (Luz). Maior
+  diferença absoluta 5,0 m, viés médio -2,0 m. Sinais alternados indicam
+  ruído aleatório, não deslocamento sistemático de referência vertical.
+  A cadeia de coordenadas, projeção e amostragem está validada por fonte
+  independente.
+
+  - No OSM, o revestimento é bem mapeado no corredor Bambuí–Esteios: dos 569
+  trechos rurais, 407 são não pavimentados (unpaved ou ground) e apenas 44
+  não têm a tag surface. Porém nenhum trecho designado MG-429 aparece sem
+  pavimentação, o que sugere que o leito natural está mapeado sem a
+  designação estadual. A identificação do traçado em estudo deve ser feita
+  por geometria, não por designação.
+
+  - A API Overpass falha com 500, 502 ou 504 quando a consulta é volumosa
+  demais, sem indicar o motivo. Uma consulta mínima na mesma instância
+  distingue serviço indisponível de consulta pesada: 428 trechos numa caixa
+  de 2 km de lado revelaram que a malha urbana dominava o pedido original.
+  Filtrar por revestimento na origem reduziu o resultado a 407 trechos e
+  7.639 vértices.
+- A instância overpass.kumi.systems falhou mesmo com consulta trivial;
+  descartada como alternativa.
