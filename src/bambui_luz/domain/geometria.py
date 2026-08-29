@@ -114,3 +114,62 @@ class Tracado:
         for anterior, atual in pairwise(self.pontos):
             acumuladas.append(acumuladas[-1] + anterior.distancia_ate(atual))
         return tuple(acumuladas)
+
+    def ponto_na_distancia(self, distancia_m: float) -> Ponto:
+        """Localiza o ponto situado a uma distancia percorrida da origem.
+
+        A posicao é interpolada linearmente entre os vértices que contêm a
+        distância informada. A cota não é definida: o traçado descreve
+        geometria em planta.
+
+        Args:
+            distancia_m: Distância acumulada desde a origem, em metros.
+
+        Returns:
+            Ponto na posição correspondente, sem cota.
+
+        Raises:
+            ValueError: Se a distância for negativa ou exceder a extensão.
+        """
+        if distancia_m < 0 or distancia_m > self.extensao:
+            raise ValueError(
+                f"distância fora do traçado: {distancia_m} m "
+                f"(extensão: {self.extensao} m)"
+            )
+        acumuladas = self.distancias_acumuladas()
+        for indice, (anterior, atual) in enumerate(pairwise(acumuladas)):
+            if distancia_m <= atual:
+                trecho = atual - anterior
+                fracao = 0.0 if trecho == 0 else (distancia_m - anterior) / trecho
+                origem, destino = self.pontos[indice], self.pontos[indice + 1]
+                return Ponto(
+                    x=origem.x + fracao * (destino.x - origem.x),
+                    y=origem.y + fracao * (destino.y - origem.y),
+                )
+        return Ponto(x=self.pontos[-1].x, y=self.pontos[-1].y)
+
+    def estacoes(self, passo_m: float) -> tuple[float, ...]:
+        """Gera as distâncias de estaqueamento ao longo do traçado.
+
+        A última estação corresponde sempre ao fim do traçado, ainda que o
+        trecho final seja menor que o passo.
+
+        Args:
+            passo_m: Espaçamento entre estações, em metros.
+
+        Returns:
+            Distâncias acumuladas, começando em 0.0 e treinamento na
+            extensão total.
+
+        Raises:
+            ValueError: Se o passo não for positivo.
+        """
+        if passo_m <= 0:
+            raise ValueError(f"o passo deve ser positivo: {passo_m}")
+        distancias = []
+        atual = 0.0
+        while atual < self.extensao:
+            distancias.append(atual)
+            atual += passo_m
+        distancias.append(self.extensao)
+        return tuple(distancias)

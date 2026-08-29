@@ -124,6 +124,31 @@ A ODbL exige atribuição e compartilhamento nos mesmos termos para bases
 derivadas. A geometria fica em `data/`, reconstruível pelo script de
 extração; o repositório publica apenas resultados.
 
+### Passo de amostragem do perfil: 100 m
+O perfil é reamostrado a cada 100 m, não a cada 20 m como sugeriria a
+estaca convencional.
+
+**Motivo:** amostrar abaixo da resolução do MDE (30 m) produz rampas
+artificiais. Medido no traçado real: rampa máxima de 35,26% a 20 m,
+25,68% a 30 m, 13,87% a 100 m e 9,30% a 200 m, sem estabilização — padrão
+característico de ruído, não de relevo.
+
+**Custo aceito:** feições de relevo com menos de 100 m de extensão não são
+representadas. A estaca de 20 m permanece como unidade de apresentação.
+
+**Consequência:** o cálculo de volumes da Sprint 5 herda esta limitação e
+deve reportar comparação relativa entre alternativas, não valor absoluto.
+
+### Rede viária carregada completa, classificada depois
+A consulta ao OSM traz todas as classes rurais, sem filtro de revestimento.
+
+**Motivo:** o percurso real é misto — pavimentado nas saídas urbanas, leito
+natural no meio. Filtrar por surface na consulta desconectava as cidades da
+malha rural e produzia "sem caminho contínuo" onde há caminho.
+
+**Custo aceito:** volume maior de dados, contornado por caixa justa (3 km de
+margem sobre os dois extremos) em vez de filtro por atributo.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -162,6 +187,12 @@ extração; o repositório publica apenas resultados.
   tag. Se o traçado em estudo estiver entre eles, não aparecerá.
   **Gatilho:** se a análise de conectividade não encontrar caminho contínuo
   entre Bambuí e o entroncamento.
+
+- **Vales dos km 22 a 28 possivelmente subestimados.** Um MDE de 30 m não
+  alcança o fundo de talvegues estreitos: a célula média inclui as encostas.
+  Some-se o risco R10, já que vales têm mata ciliar. **Gatilho:** Sprint 5,
+  no cálculo de volumes — reportar comparação relativa, não valor absoluto,
+  e registrar sensibilidade nesse trecho.
 
 ## Descobertas
 
@@ -232,3 +263,26 @@ extração; o repositório publica apenas resultados.
   7.639 vértices.
 - A instância overpass.kumi.systems falhou mesmo com consulta trivial;
   descartada como alternativa.
+
+- Caminho mínimo Bambuí-Esteios na rede do OSM: 37,31 km, sendo 27,97 km
+  de leito natural (75%) e 9,35 km de asfalto nas saídas urbanas (25%).
+  Sinuosidade de 1,23 sobre os 30,22 km de linha reta. Substitui, por
+  medição própria, a extensão de 22 km atribuída ao trecho de terra na
+  pesquisa inicial.
+- Filtrar por atributo na consulta quebra a análise de conectividade: o
+  percurso real é misto, e filtrar por revestimento não pavimentado
+  desconectava as cidades da malha rural. Carregar a rede completa e
+  classificar depois.
+- Grafo de malha viária deve ser montado vértice a vértice, não pelos
+  extremos dos trechos: 181 dos 557 extremos eram pontos interiores de
+  outros trechos, e o modelo por extremos produzia 170 componentes onde
+  havia 31.
+
+- Perfil do traçado existente Bambuí-Esteios (passo 100 m): amplitude de
+  122,7 m entre 639 e 762 m. Sobe 80 m ao sair de Bambuí até o divisor no
+  km 5, mantém platô ondulado entre os km 6 e 22, e atravessa dois vales
+  profundos entre os km 22 e 28, ambos descendo a cerca de 640 m. O trecho
+  crítico do estudo é esse intervalo de 6 km.
+- Erro de ponto médio não é detectado por teste na camada de apresentação:
+  a figura saiu com eixo horizontal ao dobro da escala por uma divisão
+  ausente. Inspeção visual é a verificação dessa camada.
