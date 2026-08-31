@@ -194,6 +194,12 @@ margem sobre os dois extremos) em vez de filtro por atributo.
   no cálculo de volumes — reportar comparação relativa, não valor absoluto,
   e registrar sensibilidade nesse trecho.
 
+- **Alternativa gerada desconhece restrições não topográficas.** O custo
+  considera apenas declividade: não há uso do solo, propriedades,
+  desapropriação ou povoados. Um traçado favorável no mapa pode ser
+  inviável por motivos fora do escopo. **Gatilho:** redigir esta ressalva
+  no README junto com a apresentação das alternativas.
+
 ## Descobertas
 
 - `git status` colapsa diretórios sem arquivos rastreados, mostrando apenas
@@ -286,3 +292,15 @@ margem sobre os dois extremos) em vez de filtro por atributo.
 - Erro de ponto médio não é detectado por teste na camada de apresentação:
   a figura saiu com eixo horizontal ao dobro da escala por uma divisão
   ausente. Inspeção visual é a verificação dessa camada.
+
+- Em relevo ondulado, as faixas de baixa declividade formam os divisores de
+  água, cercados pela rede de drenagem em encostas íngremes. Escolher
+  traçado é, em boa medida, escolher qual cumeada seguir — princípio que o
+  algoritmo de menor custo redescobriu de forma independente.
+- Operações de vizinhança não preservam máscaras de dado ausente. O
+  np.gradient usa diferenças centrais e não lê o valor da própria célula,
+  de modo que uma célula sem dado recebia declividade zero enquanto suas
+  vizinhas viravam NaN. A máscara precisa ser reaplicada depois.
+- Comparações com NaN são sempre falsas, então um filtro por limiar deixa
+  passar valores indeterminados. A máscara de ausência deve ser a última
+  operação da composição.

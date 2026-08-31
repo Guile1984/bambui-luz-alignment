@@ -104,3 +104,33 @@ Dimensionada para acomodar traçados alternativos que se afastem da linha
 reta entre os extremos. Um traçado que alcance a borda do recorte indica
 margem insuficiente, não defeito do algoritmo.
 """
+
+DECLIVIDADE_REFERENCIA_PCT = 10.0
+"""Declividade de referência para normalizar a penalidade de custo.
+
+Serve para tornar o peso interpretável: ele expressa quanto custa a mais
+atravessar uma encosta desta declividade em relação a terreno plano.
+"""
+
+PESO_DECLIVIDADE = 4.0
+"""Peso da penalidade por declividade na superfície de custo.
+
+VALOR ARBITRADO, não normativo. Significa que atravessar uma encosta de
+10% custa cinco vezes o custo de terreno plano. Escolhido para produzir
+traçados que contornam encostas sem alongar o percurso indefinidamente.
+A sensibilidade a este valor é objeto de análise própria no estudo.
+"""
+
+DECLIVIDADE_BARREIRA_PCT = 25.0
+"""Declividade acima da qual a travessia recebe custo proibitivo.
+
+VALOR ARBITRADO. Corresponde a terreno onde a implantação exigiria obras
+de contenção fora do escopo deste anteprojeto.
+"""
+
+CUSTO_BARREIRA = 1000.0
+"""Custo atribuído a células acima da declividade de barreira.
+
+Alto o bastante para desencorajar a travessia, finito para que o algoritmo
+encontre solução quando não houver alternativa, em vez de falhar.
+"""
