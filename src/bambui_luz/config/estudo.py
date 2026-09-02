@@ -7,6 +7,8 @@ camada de infraestrutura.
 
 from dataclasses import dataclass
 
+from bambui_luz.domain.rodovia import ClasseRodovia
+
 CRS_GEOGRAFICO = "EPSG:4674"
 """SIRGAS 2000 geográfico, em graus decimais. Forma de publicação do IBGE."""
 
@@ -116,9 +118,11 @@ PESO_DECLIVIDADE = 4.0
 """Peso da penalidade por declividade na superfície de custo.
 
 VALOR ARBITRADO, não normativo. Significa que atravessar uma encosta de
-10% custa cinco vezes o custo de terreno plano. Escolhido para produzir
-traçados que contornam encostas sem alongar o percurso indefinidamente.
-A sensibilidade a este valor é objeto de análise própria no estudo.
+10% custa cinco vezes o custo de terreno plano.
+
+A análise de sensibilidade (pesos 0 a 16) mostrou que a partir do peso 2 o
+corredor escolhido é ditado pelo terreno: os pesos 4, 8 e 16 compartilham
+100% das células. Este valor cai dentro desse patamar estável.
 """
 
 DECLIVIDADE_BARREIRA_PCT = 25.0
@@ -133,4 +137,27 @@ CUSTO_BARREIRA = 1000.0
 
 Alto o bastante para desencorajar a travessia, finito para que o algoritmo
 encontre solução quando não houver alternativa, em vez de falhar.
+"""
+
+FONTE_DNER_1999 = (
+    "Tabela de rampas máximas atribuída ao Manual de Projeto Geométrico de "
+    "Rodovias Rurais (DNER, 1999, p. 124). PARCIALMENTE VERIFICADA: a "
+    "vigência do manual e a existência da tabela foram confirmadas em "
+    "documentos oficiais derivados (DER-SP, GOINFRA, DER-MG), mas os valores "
+    "numéricos não foram lidos na fonte primária. Consultado em 2026-09-02."
+)
+"""Procedência dos parâmetros normativos, com o estado da verificação."""
+
+CLASSE_ADOTADA = ClasseRodovia(
+    nome="Classe III — relevo ondulado",
+    velocidade_diretriz_kmh=60.0,
+    rampa_maxima_pct=6.0,
+    fonte=FONTE_DNER_1999,
+)
+"""Classe de projeto adotada no estudo.
+
+Hipótese de trabalho: ligação vicinal entre polos agropecuários, em relevo
+cuja declividade mediana medida no corredor é de 9,6%. A escolha da classe
+é premissa do estudo, não determinação normativa, e altera diretamente a
+extensão de traçado considerada inadmissível.
 """

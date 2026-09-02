@@ -149,6 +149,29 @@ malha rural e produzia "sem caminho contínuo" onde há caminho.
 **Custo aceito:** volume maior de dados, contornado por caixa justa (3 km de
 margem sobre os dois extremos) em vez de filtro por atributo.
 
+### Aviso de depreciação da rasterio silenciado por mensagem
+O pytest filtra o PendingDeprecationWarning sobre o operador de
+multiplicação de matrizes emitido internamente pela rasterio.
+
+**Motivo:** o aviso vem de dentro da biblioteca, não do código do projeto,
+e polui a saída do CI com onze ocorrências.
+
+**Custo aceito:** um filtro a manter. Casa pelo texto exato da mensagem,
+não por categoria, de modo que outros avisos continuam visíveis.
+
+**Gatilho de revisão:** remover quando a rasterio adotar o operador @.
+
+### Peso de declividade mantido em 4,0
+A análise de sensibilidade mostrou que os pesos 4, 8 e 16 compartilham 100%
+das células — são o mesmo corredor, com ajustes locais.
+
+**Motivo:** o peso 8 economiza 11 m de relevo vencido (2%) ao custo de
+840 m de extensão adicional. A diferença está abaixo da incerteza do MDE
+de 30 m, e defendê-la seria falsa precisão.
+
+**Consequência:** a escolha do corredor não depende deste parâmetro. Os
+pesos ajustam detalhes locais, não a decisão de traçado.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -199,6 +222,16 @@ margem sobre os dois extremos) em vez de filtro por atributo.
   desapropriação ou povoados. Um traçado favorável no mapa pode ser
   inviável por motivos fora do escopo. **Gatilho:** redigir esta ressalva
   no README junto com a apresentação das alternativas.
+
+- **Montagem do grafo viário duplicada em três scripts.** A função aparece
+  em analisar_conectividade, desenhar_mapa_comparativo e comparar_tracados.
+  **Gatilho:** se um quarto script precisar dela, migrar para
+  infrastructure/malha_viaria.py com testes próprios.
+- **Traçado gerado é serrilhado (risco R6).** Passos de 30 m em oito
+  direções não constituem eixo geométrico. A suavização estava prevista
+  nesta sprint e não foi executada. **Gatilho:** antes de qualquer
+  apresentação do traçado como proposta, ou explicitar no README que o
+  produto é corredor e não eixo.
 
 ## Descobertas
 
@@ -304,3 +337,13 @@ margem sobre os dois extremos) em vez de filtro por atributo.
 - Comparações com NaN são sempre falsas, então um filtro por limiar deixa
   passar valores indeterminados. A máscara de ausência deve ser a última
   operação da composição.
+
+- Análise de sensibilidade ao peso de declividade (0 a 16): há transição de
+  regime entre os pesos 1 e 2. Abaixo, a distância domina e o traçado busca
+  a reta (32,77 km, 15,07 km inadmissíveis). Acima, o terreno domina e os
+  traçados compartilham de 88% a 100% das células — os pesos 4, 8 e 16
+  percorrem o mesmo corredor. A escolha do corredor é robusta aos
+  parâmetros arbitrados; os pesos ajustam apenas detalhes locais.
+- O relevo vencido tem ponto de inversão em torno do peso 8: acima dele, o
+  alongamento do percurso volta a aumentar a soma dos desníveis (547 m com
+  peso 4, 536 m com 8, 567 m com 16).
