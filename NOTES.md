@@ -347,3 +347,11 @@ pesos ajustam detalhes locais, não a decisão de traçado.
 - O relevo vencido tem ponto de inversão em torno do peso 8: acima dele, o
   alongamento do percurso volta a aumentar a soma dos desníveis (547 m com
   peso 4, 536 m com 8, 567 m com 16).
+
+- Um `return` indentado dentro do laço encerra a função na primeira
+  iteração, sem gerar erro. A função de busca do vértice mais próximo
+  devolvia sempre o primeiro nó avaliado. Em Python a indentação é
+  estrutura, e um nível a mais muda a semântica silenciosamente.
+- Código duplicado em scripts é código não verificado. A função de busca
+  existia em três scripts sem nenhum teste; o primeiro teste escrito após
+  a migração para infrastructure encontrou um defeito na transcrição.

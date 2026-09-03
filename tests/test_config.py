@@ -93,3 +93,18 @@ def test_local_aceita_altitude_ausente():
         fonte=FONTE_EXEMPLO,
     )
     assert local.altitude_ibge_m is None
+
+
+def test_parametros_de_secao_sao_fisicamente_plausiveis():
+    from bambui_luz.config.estudo import (
+        FATOR_CONVERSAO_CORTE_ATERRO,
+        LARGURA_PLATAFORMA_M,
+        TALUDE_ATERRO_H_V,
+        TALUDE_CORTE_H_V,
+    )
+
+    assert 6.0 <= LARGURA_PLATAFORMA_M <= 20.0
+    assert 0.5 <= TALUDE_CORTE_H_V <= 3.0
+    assert 0.5 <= TALUDE_ATERRO_H_V <= 3.0
+    assert TALUDE_ATERRO_H_V >= TALUDE_CORTE_H_V
+    assert 0.7 <= FATOR_CONVERSAO_CORTE_ATERRO <= 1.0

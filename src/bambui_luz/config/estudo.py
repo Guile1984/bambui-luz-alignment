@@ -161,3 +161,42 @@ cuja declividade mediana medida no corredor é de 9,6%. A escolha da classe
 é premissa do estudo, não determinação normativa, e altera diretamente a
 extensão de traçado considerada inadmissível.
 """
+
+LARGURA_PLATAFORMA_M = 10.0
+"""Largura da plataforma adotada, em metros.
+
+VALOR ARBITRADO. Corresponde a duas faixas de rolamento de 3,5 m e
+acostamentos de 1,5 m, compatível com a classe de projeto adotada. Não
+inclui alargamento em curva, fora do escopo deste anteprojeto.
+"""
+
+TALUDE_CORTE_H_V = 1.0
+"""Inclinação do talude de corte, em metros horizontais por metro vertical.
+
+VALOR ARBITRADO. Prática usual em solo, sem sondagem geotécnica que
+justifique valor específico.
+"""
+
+TALUDE_ATERRO_H_V = 1.5
+"""Inclinação do talude de aterro, em metros horizontais por metro vertical.
+
+VALOR ARBITRADO. Mais suave que o de corte porque o material recompactado
+tem menor coesão que o solo natural. Implica maior área de seção para a
+mesma altura, de modo que aterro custa mais volume que corte equivalente.
+"""
+
+FATOR_CONVERSAO_CORTE_ATERRO = 0.90
+"""Volume de aterro compactado obtido por metro cúbico de corte no maciço.
+
+VALOR ARBITRADO, sem sondagem. Combina empolamento na escavação e
+contração na compactação. Serve para avaliar compensação em ordem de
+grandeza, não para dimensionamento.
+"""
+
+JANELA_SUAVIZACAO_GREIDE_M = 1500.0
+"""Largura da janela de média móvel usada para gerar o greide, em metros.
+
+VALOR ARBITRADO. Janelas curtas fazem o greide copiar o terreno e não
+reduzem rampas; janelas longas o descolam do solo e inflam os volumes de
+terraplenagem. A sensibilidade a este valor é objeto de análise própria.
+"""
