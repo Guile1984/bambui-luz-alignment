@@ -5,6 +5,7 @@ import pytest
 
 from bambui_luz.infrastructure.superficie import (
     calcular_declividade,
+    calcular_posicao_topografica,
     compor_custo,
     dimensoes_celula_m,
 )
@@ -112,3 +113,97 @@ def test_referencia_nao_positiva_e_recusada():
 def test_custo_de_barreira_deve_superar_o_custo_base():
     with pytest.raises(ValueError, match="barreira"):
         compor_custo(np.zeros((2, 2)), REFERENCIA_PCT, PESO, BARREIRA_PCT, 0.5)
+
+
+def test_topo_isolado_tem_posicao_positiva():
+    cotas = np.full((9, 9), 700.0)
+    cotas[4, 4] = 730.0
+    posicao = calcular_posicao_topografica(cotas, raio_celulas=2)
+    assert posicao[4, 4] > 0
+
+
+def test_depressao_isolada_tem_posicao_negativa():
+    cotas = np.full((9, 9), 700.0)
+    cotas[4, 4] = 670.0
+    posicao = calcular_posicao_topografica(cotas, raio_celulas=2)
+    assert posicao[4, 4] < 0
+
+
+def test_terreno_plano_tem_posicao_nula():
+    posicao = calcular_posicao_topografica(np.full((9, 9), 700.0), raio_celulas=2)
+    assert posicao[4, 4] == pytest.approx(0.0)
+
+
+def test_encosta_uniforme_tem_posicao_proxima_de_zero():
+    """Uma rampa constante não é nem topo nem fundo."""
+    cotas = np.tile(np.arange(9) * 3.0 + 700.0, (9, 1))
+    posicao = calcular_posicao_topografica(cotas, raio_celulas=2)
+    assert posicao[4, 4] == pytest.approx(0.0, abs=0.01)
+
+
+def test_raio_nao_positivo_e_recusado():
+    with pytest.raises(ValueError, match="raio"):
+        calcular_posicao_topografica(np.full((5, 5), 700.0), raio_celulas=0)
+
+
+def test_penalidade_de_talvegue_encarece_o_fundo_de_vale():
+    declividade = np.zeros((3, 3))
+    posicao = np.full((3, 3), -10.0)
+    com_penalidade = compor_custo(
+        declividade,
+        REFERENCIA_PCT,
+        PESO,
+        BARREIRA_PCT,
+        CUSTO_BARREIRA,
+        posicao_topografica_m=posicao,
+        posicao_referencia_m=10.0,
+        peso_talvegue=6.0,
+    )
+    assert com_penalidade[1, 1] == pytest.approx(7.0)
+
+
+def test_penalidade_nao_atinge_posicao_elevada():
+    """A penalidade é assimétrica: cumeada não é encarecida."""
+    declividade = np.zeros((3, 3))
+    posicao = np.full((3, 3), 10.0)
+    custo = compor_custo(
+        declividade,
+        REFERENCIA_PCT,
+        PESO,
+        BARREIRA_PCT,
+        CUSTO_BARREIRA,
+        posicao_topografica_m=posicao,
+        posicao_referencia_m=10.0,
+        peso_talvegue=6.0,
+    )
+    assert custo[1, 1] == pytest.approx(1.0)
+
+
+def test_sem_posicao_topografica_o_custo_nao_muda():
+    declividade = np.full((3, 3), 10.0)
+    sem = compor_custo(declividade, REFERENCIA_PCT, PESO, BARREIRA_PCT, CUSTO_BARREIRA)
+    com_peso_zero = compor_custo(
+        declividade,
+        REFERENCIA_PCT,
+        PESO,
+        BARREIRA_PCT,
+        CUSTO_BARREIRA,
+        posicao_topografica_m=np.full((3, 3), -20.0),
+        peso_talvegue=0.0,
+    )
+    assert sem == pytest.approx(com_peso_zero)
+
+
+def test_posicao_indeterminada_recebe_barreira():
+    declividade = np.zeros((3, 3))
+    posicao = np.full((3, 3), np.nan)
+    custo = compor_custo(
+        declividade,
+        REFERENCIA_PCT,
+        PESO,
+        BARREIRA_PCT,
+        CUSTO_BARREIRA,
+        posicao_topografica_m=posicao,
+        peso_talvegue=6.0,
+    )
+    assert custo[1, 1] == pytest.approx(CUSTO_BARREIRA)

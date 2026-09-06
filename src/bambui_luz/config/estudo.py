@@ -200,3 +200,27 @@ VALOR ARBITRADO. Janelas curtas fazem o greide copiar o terreno e não
 reduzem rampas; janelas longas o descolam do solo e inflam os volumes de
 terraplenagem. A sensibilidade a este valor é objeto de análise própria.
 """
+
+RAIO_POSICAO_TOPOGRAFICA_CELULAS = 15
+"""Raio da vizinhança para o índice de posição topográfica, em células.
+
+Corresponde a cerca de 450 m no modelo de 30 m. Este raio distinguiu com
+clareza o traçado existente (mediana +5,6 m, em divisor) do traçado gerado
+sem esta penalidade (mediana -2,8 m, em talvegue).
+"""
+
+POSICAO_REFERENCIA_M = 10.0
+"""Rebaixamento de referência para normalizar a penalidade de talvegue.
+
+Torna o peso interpretável: ele expressa quanto custa a mais atravessar
+uma célula 10 m abaixo do entorno em relação a terreno neutro.
+"""
+
+PESO_TALVEGUE = 6.0
+"""Peso da penalidade por posição rebaixada na superfície de custo.
+
+VALOR ARBITRADO, não normativo. Representa custos que a declividade não
+captura: drenagem, travessia de curso d'água, risco de inundação e
+restrição em área de preservação permanente. A sensibilidade a este valor
+é objeto de análise própria.
+"""

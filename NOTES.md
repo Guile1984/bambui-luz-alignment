@@ -172,6 +172,20 @@ de 30 m, e defendê-la seria falsa precisão.
 **Consequência:** a escolha do corredor não depende deste parâmetro. Os
 pesos ajustam detalhes locais, não a decisão de traçado.
 
+### Penalidade de posição topográfica na superfície de custo
+Acrescentado ao custo um termo quadrático assimétrico, aplicado apenas às
+células rebaixadas em relação à vizinhança de 450 m.
+
+**Motivo:** a declividade sozinha não distingue divisor de talvegue, e o
+custo real do fundo de vale — drenagem, travessias, inundação, área de
+preservação permanente — está fora do modelo.
+
+**Efeito:** a alternativa passou de posição mediana -2,8 m para +13,0 m,
+superando o traçado existente (+5,6 m).
+
+**Custo aceito:** mais um parâmetro arbitrado (peso 6,0), sujeito a
+análise de sensibilidade própria.
+
 ## Pendências
 
 - **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
@@ -355,3 +369,24 @@ pesos ajustam detalhes locais, não a decisão de traçado.
 - Código duplicado em scripts é código não verificado. A função de busca
   existia em três scripts sem nenhum teste; o primeiro teste escrito após
   a migração para infrastructure encontrou um defeito na transcrição.
+
+- O caminho de menor custo baseado apenas em declividade converge para o
+  talvegue: em relevo ondulado, os dois lugares planos são o topo dos
+  divisores e o fundo dos vales, e o vale é mais direto. O traçado gerado
+  tinha cota mediana de 647,4 m contra 717,9 m do existente, com 87,3% dos
+  pontos abaixo da vizinhança de 450 m.
+- A análise de sensibilidade não detecta erro de modelo. Ela verifica se o
+  resultado depende dos parâmetros, não se o modelo representa a realidade.
+  Os traçados gerados eram robustos aos pesos e todos percorriam o vale.
+- O índice de posição topográfica distingue formas que a declividade não
+  separa: topo plano e fundo plano têm a mesma declividade e posições
+  opostas. A penalidade deve ser assimétrica, aplicada só ao rebaixamento,
+  para não empurrar o traçado à meia encosta.
+- O desequilíbrio corte-aterro não vem do posicionamento do greide, que a
+  média móvel preserva (altura média +0,018 m). Vem da assimetria dos
+  taludes: para alturas iguais, a área de aterro supera a de corte em 8,3%
+  a 2 m e 33,3% a 20 m, porque o termo do talude é quadrático.
+- Os volumes de terraplenagem variam por um fator de dez conforme a janela
+  de suavização do greide: de 359 mil m³ de corte com janela de 500 m a
+  3,83 milhões com 6.000 m, no mesmo traçado. O valor absoluto é arbitrário;
+  apenas a comparação relativa entre alternativas se sustenta.
