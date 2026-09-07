@@ -1,6 +1,7 @@
 """Testes da extração de perfil longitudinal."""
 
 from collections.abc import Sequence
+from itertools import pairwise
 
 import pytest
 
@@ -58,3 +59,31 @@ def test_ponto_na_distancia_recusa_valor_fora_do_tracado():
 def test_estacoes_recusam_passo_nao_positivo():
     with pytest.raises(ValueError, match="positivo"):
         _tracado_reto().estacoes(0.0)
+
+
+def test_trecho_final_desprezivel_e_incorporado():
+    """Um traçado de 1000,9 m com passo de 100 m não gera segmento de 0,9 m."""
+    tracado = Tracado(pontos=(Ponto(x=0.0, y=0.0), Ponto(x=1000.9, y=0.0)))
+    distancias = tracado.estacoes(100.0)
+    assert distancias[-1] == pytest.approx(1000.9)
+    assert distancias[-2] == pytest.approx(900.0)
+
+
+def test_trecho_final_significativo_e_preservado():
+    """Um trecho final de 50 m, metade do passo, forma segmento próprio."""
+    tracado = Tracado(pontos=(Ponto(x=0.0, y=0.0), Ponto(x=1050.0, y=0.0)))
+    distancias = tracado.estacoes(100.0)
+    assert distancias[-1] == pytest.approx(1050.0)
+    assert distancias[-2] == pytest.approx(1000.0)
+
+
+def test_nenhum_segmento_e_desprezivel():
+    tracado = Tracado(pontos=(Ponto(x=0.0, y=0.0), Ponto(x=1000.9, y=0.0)))
+    distancias = tracado.estacoes(100.0)
+    comprimentos = [b - a for a, b in pairwise(distancias)]
+    assert min(comprimentos) > 10.0
+
+
+def test_tracado_mais_curto_que_o_passo_mantem_duas_estacoes():
+    tracado = Tracado(pontos=(Ponto(x=0.0, y=0.0), Ponto(x=5.0, y=0.0)))
+    assert tracado.estacoes(100.0) == pytest.approx((0.0, 5.0))

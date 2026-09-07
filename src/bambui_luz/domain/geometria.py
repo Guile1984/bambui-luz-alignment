@@ -56,6 +56,13 @@ class Ponto:
 TOLERANCIA_COINCIDENCIA_M = 1e-6
 """Distância mínima, em metros, para dois pontos serem considerados distintos."""
 
+FRACAO_MINIMA_SEGMENTO = 0.1
+"""Fração do passo abaixo da qual o trecho final é incorporado ao anterior.
+
+Evita segmentos residuais de comprimento desprezível, sobre os quais o
+cálculo de rampa produz valores espúrios.
+"""
+
 
 @dataclass(frozen=True, slots=True)
 class Tracado:
@@ -151,14 +158,17 @@ class Tracado:
     def estacoes(self, passo_m: float) -> tuple[float, ...]:
         """Gera as distâncias de estaqueamento ao longo do traçado.
 
-        A última estação corresponde sempre ao fim do traçado, ainda que o
-        trecho final seja menor que o passo.
+        A última estação corresponde sempre ao fim do traçado. Quando o
+        trecho final é muito menor que o passo, ele é incorporado à estação
+        anterior em vez de formar um segmento próprio: rampas calculadas
+        sobre comprimentos desprezíveis produzem valores espúrios, pois a
+        diferença de cota é dividida por um denominador minúsculo.
 
         Args:
             passo_m: Espaçamento entre estações, em metros.
 
         Returns:
-            Distâncias acumuladas, começando em 0.0 e treinamento na
+            Distâncias acumuladas, começando em 0.0 e terminando na
             extensão total.
 
         Raises:
@@ -171,5 +181,9 @@ class Tracado:
         while atual < self.extensao:
             distancias.append(atual)
             atual += passo_m
+        if len(distancias) > 1 and (
+            self.extensao - distancias[-1] < passo_m * FRACAO_MINIMA_SEGMENTO
+        ):
+            distancias.pop()
         distancias.append(self.extensao)
         return tuple(distancias)

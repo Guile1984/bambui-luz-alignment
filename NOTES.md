@@ -247,6 +247,16 @@ análise de sensibilidade própria.
   apresentação do traçado como proposta, ou explicitar no README que o
   produto é corredor e não eixo.
 
+- **Vales dos km 22 e 33 da alternativa tratados como aterro.** Aterros
+  acima de 20 m em vale encaixado seriam, na prática, transpostos por obra
+  de arte. O escopo exclui obras de arte especiais, de modo que o volume
+  desses trechos está sobrestimado. **Gatilho:** se o estudo for estendido
+  para incluir estruturas.
+- **Ponto de conexão em Esteios ainda é a sede da vila.** O nó correto é o
+  entroncamento MG-429/MG-176, que a rota real tangencia. O trecho final da
+  alternativa seria diferente com o destino correto. **Gatilho:** obter a
+  coordenada do entroncamento e reexecutar.
+
 ## Descobertas
 
 - `git status` colapsa diretórios sem arquivos rastreados, mostrando apenas
@@ -390,3 +400,23 @@ análise de sensibilidade própria.
   de suavização do greide: de 359 mil m³ de corte com janela de 500 m a
   3,83 milhões com 6.000 m, no mesmo traçado. O valor absoluto é arbitrário;
   apenas a comparação relativa entre alternativas se sustenta.
+
+- O estaqueamento gerava um segmento residual no fim do traçado (0,898 m no
+  existente), sobre o qual a rampa era calculada com denominador
+  desprezível: 70,38% com janela de 3.000 m, contra 2,37% ignorando o toco.
+  Corrigido incorporando trechos finais menores que 10% do passo à estação
+  anterior. Não afetou os números já publicados, que estavam em segmentos
+  de 100 m.
+- A janela de 1.500 m é a menor que produz greide conforme à Classe III nos
+  dois traçados: em 1.000 m ambos têm três segmentos acima de 6%. Atender à
+  norma quadruplica o volume em relação à janela de 500 m — a terraplenagem
+  elevada é consequência da conformidade, não do método.
+
+- Os dois traçados coincidem nos primeiros 8 km e depois seguem divisores
+  de água distintos: o existente atravessa a chapada em torno da latitude
+  -19,95, e a alternativa a contorna pelo sul. A chapada é plana mas cercada
+  de escarpas, e o algoritmo preferiu terreno intermediário contínuo a pagar
+  a subida e a descida.
+- O déficit de material da alternativa concentra-se em dois degraus da curva
+  de massa, nos km 22 e 33, correspondentes a vales transpostos com aterros
+  acima de 20 m. São candidatos naturais a obra de arte em vez de aterro.

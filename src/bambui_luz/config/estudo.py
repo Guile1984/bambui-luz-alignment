@@ -196,9 +196,15 @@ grandeza, não para dimensionamento.
 JANELA_SUAVIZACAO_GREIDE_M = 1500.0
 """Largura da janela de média móvel usada para gerar o greide, em metros.
 
-VALOR ARBITRADO. Janelas curtas fazem o greide copiar o terreno e não
-reduzem rampas; janelas longas o descolam do solo e inflam os volumes de
-terraplenagem. A sensibilidade a este valor é objeto de análise própria.
+Escolhida como a menor janela que produz greide conforme à classe adotada
+em ambos os traçados estudados: com 1.000 m, os dois apresentam três
+segmentos acima de 6%; com 1.500 m, nenhum.
+
+O parâmetro governa um conflito: janelas menores reduzem o volume de
+terraplenagem e melhoram a compensação, mas elevam as rampas do greide.
+Os volumes variam por um fator de dez ao longo da faixa examinada, razão
+pela qual prestam-se à comparação relativa entre alternativas e não ao
+dimensionamento.
 """
 
 RAIO_POSICAO_TOPOGRAFICA_CELULAS = 15

@@ -15,6 +15,7 @@ import numpy as np
 
 from bambui_luz.config.estudo import (
     BAMBUI,
+    CLASSE_ADOTADA,
     CRS_GEOGRAFICO,
     CRS_TRABALHO,
     ESTEIOS,
@@ -104,19 +105,34 @@ for altura in (2.0, 5.0, 10.0, 20.0):
         f"aterro {aterro:>7.1f} m2  (aterro {100 * (aterro / corte - 1):+.1f}%)"
     )
 
-print("\nSensibilidade do saldo à janela de suavização:\n")
-print(f"{'Janela (m)':>12}{'Corte (m3)':>14}{'Aterro (m3)':>14}{'Saldo (m3)':>14}")
+print("\nConflito entre compensação e conformidade:\n")
+cabecalho = (
+    f"{'Janela (m)':>11}{'Rampa máx':>11}{'Inadm':>8}"
+    f"{'Corte (m3)':>14}{'Aterro (m3)':>14}{'Saldo (m3)':>14}{'m3/km':>10}"
+)
+print(cabecalho)
+print("-" * len(cabecalho))
+
 with ProvedorElevacaoRaster(MDE) as provedor:
-    perfil = extrair_perfil(tracados["Existente (OSM)"], provedor)
-    for janela in (500.0, 1000.0, 1500.0, 3000.0, 6000.0):
-        greide = suavizar(perfil, janela)
-        alturas = np.array(alturas_de_trabalho(perfil, greide))
-        areas_corte = np.array([SECAO.area_corte(-a) for a in alturas])
-        areas_aterro = np.array([SECAO.area_aterro(a) for a in alturas])
+    for nome, tracado in tracados.items():
+        print(f"\n{nome}:")
+        perfil = extrair_perfil(tracado, provedor)
+        extensao_km = perfil.extensao / 1000
         distancias = np.diff([e.distancia_m for e in perfil.estacoes])
-        corte = float(((areas_corte[:-1] + areas_corte[1:]) / 2 * distancias).sum())
-        aterro = float(((areas_aterro[:-1] + areas_aterro[1:]) / 2 * distancias).sum())
-        print(
-            f"{janela:>12.0f}{corte:>14,.0f}{aterro:>14,.0f}"
-            f"{corte * 0.9 - aterro:>14,.0f}"
-        )
+        for janela in (300.0, 500.0, 800.0, 1000.0, 1500.0, 2000.0, 3000.0):
+            greide = suavizar(perfil, janela)
+            alturas = np.array(alturas_de_trabalho(perfil, greide))
+            areas_corte = np.array([SECAO.area_corte(-a) for a in alturas])
+            areas_aterro = np.array([SECAO.area_aterro(a) for a in alturas])
+            corte = float(((areas_corte[:-1] + areas_corte[1:]) / 2 * distancias).sum())
+            aterro = float(
+                ((areas_aterro[:-1] + areas_aterro[1:]) / 2 * distancias).sum()
+            )
+            inadmissiveis = len(greide.segmentos_inadmissiveis(CLASSE_ADOTADA))
+            movimentado = corte + aterro
+            print(
+                f"{janela:>11.0f}{greide.rampa_maxima_absoluta:>10.2f}%"
+                f"{inadmissiveis:>8}{corte:>14,.0f}{aterro:>14,.0f}"
+                f"{corte * 0.9 - aterro:>14,.0f}"
+                f"{movimentado / extensao_km:>10,.0f}"
+            )
