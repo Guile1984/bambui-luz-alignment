@@ -420,3 +420,13 @@ análise de sensibilidade própria.
 - O déficit de material da alternativa concentra-se em dois degraus da curva
   de massa, nos km 22 e 33, correspondentes a vales transpostos com aterros
   acima de 20 m. São candidatos naturais a obra de arte em vez de aterro.
+
+- Os pesos de declividade e de talvegue competem entre si: quanto maior a
+  penalidade de declividade, mais atraente fica o fundo de vale, que é a
+  região mais plana. A transição vale-divisor ocorre entre os pesos de
+  talvegue 0 e 1 para declividade 2 e 4, e entre 1 e 3 para declividade 8.
+  Uma varredura de um parâmetro por vez não revelaria essa interação.
+- Com peso de talvegue igual ou superior a 3, todas as combinações
+  produzem o mesmo corredor: posição topográfica mediana entre +10,7 e
+  +13,0 m e sobreposição de 73% a 100% com o traçado adotado. A correção
+  do modelo é robusta, e o peso 6,0 não está próximo da fronteira.
