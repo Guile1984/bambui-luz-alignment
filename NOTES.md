@@ -188,74 +188,34 @@ análise de sensibilidade própria.
 
 ## Pendências
 
-- **Licenciamento de conteúdo não decidido.** A MIT cobre o código. O
-  relatório, gráficos e texto do estudo são conteúdo, não software.
-  **Gatilho:** se o relatório final for divulgado como peça autônoma,
-  avaliar licença dupla (MIT + Creative Commons).
+### Antes de divulgar o repositório
+- **Texto literal da atribuição Copernicus.** O aviso no README foi
+  redigido na forma usual, mas o texto exato da licença não foi lido: as
+  tentativas de acesso à página oficial foram bloqueadas. Conferir e
+  substituir se divergir.
 
-- **Tabela de rampas máximas não verificada na fonte primária.** A referência
-  é o Manual de Projeto Geométrico de Rodovias Rurais (DNER/DNIT, 1999). Um
-  ponto corroborante de fonte secundária indica 4,5% para Classe I-B em relevo
-  ondulado, mas a tabela completa não foi confirmada no manual original.
-  **Gatilho:** antes de definir os parâmetros em `config/`, obter o manual e
-  conferir os valores por classe e relevo. Nenhum número normativo entra no
-  projeto sem essa conferência.
+### Verificações que fortaleceriam o estudo
+- **Valores de rampa máxima do DNER (1999) não lidos na fonte primária.**
+  A vigência do manual e a existência da tabela estão confirmadas em
+  documentos oficiais derivados; os números, não.
+- **Extensão de 27,97 km de leito natural.** Medida na consulta filtrada
+  por revestimento, abordagem depois superada. A medição continua válida,
+  mas convém confirmar que é reproduzível pelos scripts atuais.
 
-- **README com premissas desatualizadas.** As distâncias de ~25 km em linha
-  reta e ~70 km pela via pavimentada vieram da pesquisa inicial e não se
-  sustentam. **Gatilho:** encerramento da Sprint 2, quando as distâncias
-  estiverem medidas por código. Incluir seção "Revisões de premissa".
-- **Licenciamento do OpenStreetMap não avaliado.** A extração da geometria
-  viária na Sprint 3 usará dados ODbL, com exigência de atribuição e cláusula
-  de compartilhamento para bases derivadas. **Gatilho:** antes de publicar
-  qualquer geometria derivada no repositório.
-- **Situação real da obra.** A fonte oficial registra recuperação do leito
-  natural em curso; o asfaltamento permanece como expectativa, não como obra
-  contratada. **Gatilho:** ajustar o texto do README junto com as premissas.
-
-- **Aviso de atribuição do Copernicus ausente no README.** **Gatilho:**
-  antes de divulgar o repositório.
-- **Ponto de conexão em Esteios provisório.** A sede da vila é referência
-  temporária; o nó correto é o entroncamento MG-429/MG-176, confirmado por
-  imagem. **Gatilho:** Sprint 3, com a geometria viária do OpenStreetMap.
-
-- **Trechos sem tag surface excluídos.** A consulta de geometria filtra por
-  revestimento não pavimentado, deixando de fora os 44 trechos rurais sem a
-  tag. Se o traçado em estudo estiver entre eles, não aparecerá.
-  **Gatilho:** se a análise de conectividade não encontrar caminho contínuo
-  entre Bambuí e o entroncamento.
-
-- **Vales dos km 22 a 28 possivelmente subestimados.** Um MDE de 30 m não
-  alcança o fundo de talvegues estreitos: a célula média inclui as encostas.
-  Some-se o risco R10, já que vales têm mata ciliar. **Gatilho:** Sprint 5,
-  no cálculo de volumes — reportar comparação relativa, não valor absoluto,
-  e registrar sensibilidade nesse trecho.
-
-- **Alternativa gerada desconhece restrições não topográficas.** O custo
-  considera apenas declividade: não há uso do solo, propriedades,
-  desapropriação ou povoados. Um traçado favorável no mapa pode ser
-  inviável por motivos fora do escopo. **Gatilho:** redigir esta ressalva
-  no README junto com a apresentação das alternativas.
-
-- **Montagem do grafo viário duplicada em três scripts.** A função aparece
-  em analisar_conectividade, desenhar_mapa_comparativo e comparar_tracados.
-  **Gatilho:** se um quarto script precisar dela, migrar para
-  infrastructure/malha_viaria.py com testes próprios.
-- **Traçado gerado é serrilhado (risco R6).** Passos de 30 m em oito
-  direções não constituem eixo geométrico. A suavização estava prevista
-  nesta sprint e não foi executada. **Gatilho:** antes de qualquer
-  apresentação do traçado como proposta, ou explicitar no README que o
-  produto é corredor e não eixo.
-
-- **Vales dos km 22 e 33 da alternativa tratados como aterro.** Aterros
-  acima de 20 m em vale encaixado seriam, na prática, transpostos por obra
-  de arte. O escopo exclui obras de arte especiais, de modo que o volume
-  desses trechos está sobrestimado. **Gatilho:** se o estudo for estendido
-  para incluir estruturas.
-- **Ponto de conexão em Esteios ainda é a sede da vila.** O nó correto é o
-  entroncamento MG-429/MG-176, que a rota real tangencia. O trecho final da
-  alternativa seria diferente com o destino correto. **Gatilho:** obter a
-  coordenada do entroncamento e reexecutar.
+### Trabalho futuro
+- **Coordenada do entroncamento MG-429/MG-176** como extremidade, em lugar
+  da sede de Esteios.
+- **Suavização do traçado gerado**, prevista na Sprint 4 e não executada.
+  Alteraria a aparência, não as métricas, que se calculam sobre perfil
+  reamostrado a 100 m.
+- **Ponto de conexão em Bambuí**: centro versus entroncamento no contorno
+  de 3,5 km anunciado. Alternativas geradas a partir de pontos diferentes
+  não são comparáveis entre si.
+- **Vales com aterro acima de 20 m** tratados como aterro. Na prática
+  seriam obras de arte, excluídas do escopo, de modo que o volume desses
+  trechos está sobrestimado.
+- **Desempenho da suavização do greide.** O laço é quadrático e responde
+  por 50 dos 114 segundos da reprodução completa.
 
 ## Descobertas
 
